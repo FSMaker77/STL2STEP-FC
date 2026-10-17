@@ -316,6 +316,10 @@ class MainWindow(QMainWindow):
         self.log.appendPlainText(
             f"✓ {Path(result.output_path).name} ({kind}, volume {result.solid_volume:.3f}){extra}"
         )
+        if result.preview_mesh is not None:
+            self._preview_mesh = result.preview_mesh
+            self.preview.set_mesh(result.preview_mesh)
+            self.log.appendPlainText(f"Anteprima STEP: {Path(result.output_path).name}")
         self._start_next(self.params.build_params())
 
     def _on_failed(self, idx: int, inp: str, err: str) -> None:

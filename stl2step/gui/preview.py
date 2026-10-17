@@ -69,6 +69,7 @@ class MeshPreview(QOpenGLWidget):
         self._rot_x = -30.0
         self._rot_y = -35.0
         self._zoom = 1.0
+        self._pan = np.zeros(2, dtype=np.float32)
         self._last = QPoint()
         self._program: QOpenGLShaderProgram | None = None
         self._vao: QOpenGLVertexArrayObject | None = None
@@ -154,6 +155,9 @@ class MeshPreview(QOpenGLWidget):
         model = np.eye(4, dtype=np.float32)
         model[:3, :3] = (rot * s).astype(np.float32)
         model[:3, 3] = (-rot @ self._center * s).astype(np.float32)
+        # pan in normalized-device units, converted back to world units
+        model[0, 3] += self._pan[0] / s
+        model[1, 3] += self._pan[1] / s
 
         # perspective projection
         aspect = max(self.width() / max(self.height(), 1), 0.1)
@@ -211,12 +215,27 @@ class MeshPreview(QOpenGLWidget):
             self._rot_x = max(-89.0, min(89.0, self._rot_x))
             self._last = e.position()
             self.update()
+        elif e.buttons() & Qt.RightButton:
+            dx = e.position().x() - self._last.x()
+            dy = e.position().y() - self._last.y()
+            h = max(self.height(), 1)
+            self._pan[0] += 2.0 * dx / h
+            self._pan[1] -= 2.0 * dy / h
+            self._last = e.position()
+            self.update()
         elif e.buttons() & Qt.MiddleButton:
             dy = e.position().y() - self._last.y()
             self._zoom *= 1.0 + dy * 0.01
             self._zoom = max(0.1, min(20.0, self._zoom))
             self._last = e.position()
             self.update()
+
+    def mouseDoubleClickEvent(self, e: QMouseEvent) -> None:
+        self._rot_x = -30.0
+        self._rot_y = -35.0
+        self._zoom = 1.0
+        self._pan = np.zeros(2, dtype=np.float32)
+        self.update()
 
     def wheelEvent(self, e: QWheelEvent) -> None:
         self._zoom *= 1.0 + e.angleDelta().y() * 0.001

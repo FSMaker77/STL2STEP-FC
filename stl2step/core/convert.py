@@ -8,7 +8,7 @@ from typing import Callable, Optional
 
 import numpy as np
 
-from . import brep, stl_io
+from . import brep, step_io, stl_io
 from .mesh import Mesh
 from .segmentation import Segmentation, SegmentationParams
 
@@ -60,6 +60,7 @@ class ConversionResult:
     is_solid: bool = False
     solid_volume: float = 0.0
     message: str = ""
+    preview_mesh: Optional["Mesh"] = None  # tessellated result, for the GUI
 
 
 def _noop_progress(stage: str, frac: float, message: str) -> None:
@@ -71,6 +72,16 @@ def _write_step(shape: TopoDS_Shape, path: str) -> bool:
     writer.Transfer(shape, STEPControl_AsIs)
     status = writer.Write(path)
     return status == IFSelect_RetDone
+
+
+def _tessellate_preview(shape: TopoDS_Shape, result: "ConversionResult", with_preview: bool) -> None:
+    if not with_preview:
+        return
+    try:
+        verts, faces = step_io.tessellate_shape(shape)
+        result.preview_mesh = Mesh(verts, faces)
+    except Exception:  # noqa: BLE001 — preview is best-effort
+        result.preview_mesh = None
 
 
 def _shape_from_clean_mesh(mesh: Mesh, make_solid: bool, tol: float) -> Optional[TopoDS_Shape]:
@@ -90,6 +101,8 @@ def convert_stl_to_step(
     output_path: str,
     params: ConversionParams,
     progress: Optional[ProgressCallback] = None,
+    *,
+    with_preview: bool = False,
 ) -> ConversionResult:
     progress = progress or _noop_progress
 
@@ -121,6 +134,7 @@ def convert_stl_to_step(
         _record_shape_stats(shape, result)
         progress("done", 1.0, "Completato")
         result.message = "STEP tassellato (mesh come facce triangolari)"
+        _tessellate_preview(shape, result, with_preview)
         return result
 
     # ------------------------------------------------------------- parametric
@@ -207,6 +221,7 @@ def convert_stl_to_step(
     progress("write", 0.92, "Scrittura file STEP")
     if not _write_step(shape, output_path):
         raise RuntimeError("Scrittura STEP fallita")
+    _tessellate_preview(shape, result, with_preview)
 
     progress("done", 1.0, "Completato")
     result.message = result.message or _describe_result(result)

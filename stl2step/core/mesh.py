@@ -8,6 +8,7 @@ so it stays fast even on meshes with hundreds of thousands of triangles.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Optional, Tuple
 
 import numpy as np
@@ -62,6 +63,18 @@ class Mesh:
         if clean:
             mesh = mesh.remove_degenerate().remove_unreferenced()
         return mesh
+
+    @classmethod
+    def from_step(
+        cls,
+        path: str,
+        linear_deflection: float = 0.05,
+        angular_deflection: float = 0.5,
+    ) -> "Mesh":
+        from . import step_io
+
+        vertices, faces = step_io.load_step(path, linear_deflection, angular_deflection)
+        return cls(vertices=vertices, faces=faces, name=Path(path).name)
 
     def to_stl(self, path: str) -> None:
         stl_io.write_stl(path, self.vertices, self.faces)

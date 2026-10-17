@@ -17,6 +17,7 @@ class ConvertWorker(QThread):
         self.input_path = input_path
         self.output_path = output_path
         self.params = params
+        self.with_preview = True
         self._cancelled = False
 
     def cancel(self) -> None:
@@ -29,6 +30,7 @@ class ConvertWorker(QThread):
                 self.output_path,
                 self.params,
                 progress=lambda s, f, m: self.progress.emit(s, f, m),
+                with_preview=self.with_preview,
             )
             if self._cancelled:
                 return
