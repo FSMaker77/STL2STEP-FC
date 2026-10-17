@@ -13,8 +13,17 @@ from .theme import QSS
 from ..version import APP_NAME
 
 
+def configure_surface_format() -> None:
+    fmt = QSurfaceFormat()
+    fmt.setVersion(3, 3)
+    fmt.setProfile(QSurfaceFormat.OpenGLContextProfile.CoreProfile)
+    fmt.setDepthBufferSize(24)
+    fmt.setSamples(4)
+    QSurfaceFormat.setDefaultFormat(fmt)
+
+
 def main() -> int:
-    QSurfaceFormat.setDefaultFormat(QSurfaceFormat())
+    configure_surface_format()
     app = QApplication(sys.argv)
     app.setApplicationName(APP_NAME)
     app.setOrganizationName("STL2STEP")

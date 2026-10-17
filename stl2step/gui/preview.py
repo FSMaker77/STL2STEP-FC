@@ -60,6 +60,9 @@ class MeshPreview(QOpenGLWidget):
         super().__init__(parent)
         self.setMinimumSize(320, 240)
         fmt = QSurfaceFormat()
+        fmt.setVersion(3, 3)
+        fmt.setProfile(QSurfaceFormat.OpenGLContextProfile.CoreProfile)
+        fmt.setDepthBufferSize(24)
         fmt.setSamples(4)
         self.setFormat(fmt)
         self._mesh: Mesh | None = None
@@ -92,9 +95,12 @@ class MeshPreview(QOpenGLWidget):
     # ------------------------------------------------------------------ GL
     def initializeGL(self) -> None:
         self._program = QOpenGLShaderProgram()
-        self._program.addShaderFromSourceCode(QOpenGLShader.Vertex, _VERT)
-        self._program.addShaderFromSourceCode(QOpenGLShader.Fragment, _FRAG)
-        self._program.link()
+        if not self._program.addShaderFromSourceCode(QOpenGLShader.Vertex, _VERT):
+            print("vertex shader:", self._program.log())
+        if not self._program.addShaderFromSourceCode(QOpenGLShader.Fragment, _FRAG):
+            print("fragment shader:", self._program.log())
+        if not self._program.link():
+            print("link:", self._program.log())
         self._upload()
 
     def _upload(self) -> None:
@@ -166,7 +172,7 @@ class MeshPreview(QOpenGLWidget):
         return model, proj, mvp, normal_mat
 
     def paintGL(self) -> None:
-        from PySide6.QtGui import QOpenGLContext
+        from PySide6.QtGui import QMatrix3x3, QMatrix4x4, QOpenGLContext
 
         f = QOpenGLContext.currentContext().functions()
         f.glClearColor(0.078, 0.086, 0.122, 1.0)
@@ -178,9 +184,12 @@ class MeshPreview(QOpenGLWidget):
 
         model, proj, mvp, normal_mat = self._matrix()
         self._program.bind()
-        self._program.setUniformValueArray("uMVP", mvp.flatten().tolist(), 16)
-        self._program.setUniformValueArray("uModel", model.flatten().tolist(), 16)
-        self._program.setUniformValueArray("uNormalMat", normal_mat.flatten().tolist(), 9)
+        loc_mvp = self._program.uniformLocation(b"uMVP")
+        loc_model = self._program.uniformLocation(b"uModel")
+        loc_normal = self._program.uniformLocation(b"uNormalMat")
+        f.glUniformMatrix4fv(loc_mvp, 1, True, mvp.flatten().tolist())
+        f.glUniformMatrix4fv(loc_model, 1, True, model.flatten().tolist())
+        f.glUniformMatrix3fv(loc_normal, 1, True, normal_mat.flatten().tolist())
         self._program.setUniformValue("uLightDir", 0.5, 0.6, 1.0)
         self._program.setUniformValue("uBaseColor", *self._base_color)
 
