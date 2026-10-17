@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=STL2STEP
+Name=STL2STEP FC
 Comment=Convert STL meshes into editable STEP CAD models
 Exec=AppRun %F
 Icon=stl2step

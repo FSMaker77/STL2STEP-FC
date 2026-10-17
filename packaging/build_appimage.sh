@@ -16,12 +16,12 @@ if [ ! -x .venv/bin/python ]; then
     exit 1
 fi
 
-APP="STL2STEP"
+APP="STL2STEP-FC"
 VERSION="$(./.venv/bin/python -c 'import stl2step; print(stl2step.__version__)')"
 PYVER="$(./.venv/bin/python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
 
 APPDIR="$ROOT/dist/AppDir"
-OUT="$ROOT/dist/${APP}-${VERSION}-x86_64.AppImage"
+OUT="$ROOT/dist/${APP}-${VERSION}-Linux-x86_64.AppImage"
 
 echo "==> Costruzione AppDir per ${APP} ${VERSION} (Python ${PYVER})"
 
