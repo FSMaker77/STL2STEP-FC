@@ -126,5 +126,18 @@ QLabel#title {{ font-size: 18px; font-weight: 700; }}
 QLabel#subtitle {{ color: {FG_MUTED}; }}
 QLabel#stat {{ color: {FG_MUTED}; font-size: 12px; }}
 QLabel#statValue {{ font-weight: 600; }}
+QLabel#previewHint {{
+    color: {FG_MUTED};
+    font-size: 13px;
+    background: transparent;
+}}
+QPushButton#previewReset {{
+    background-color: rgba(40, 46, 62, 210);
+    border: 1px solid {BORDER};
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+}}
+QPushButton#previewReset:hover {{ background-color: {BG_ELEV}; }}
 QSplitter::handle {{ background-color: {BORDER}; }}
 """

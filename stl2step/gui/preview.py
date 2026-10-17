@@ -6,6 +6,7 @@ import numpy as np
 from PySide6.QtCore import Qt, QPoint
 from PySide6.QtGui import QSurfaceFormat, QMouseEvent, QWheelEvent
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
+from PySide6.QtWidgets import QLabel, QPushButton
 from PySide6.QtOpenGL import (
     QOpenGLBuffer,
     QOpenGLShader,
@@ -80,6 +81,24 @@ class MeshPreview(QOpenGLWidget):
         self._base_color = (0.62, 0.70, 0.88)
         self._empty = True
 
+        self._hint = QLabel(self)
+        self._hint.setObjectName("previewHint")
+        self._hint.setAlignment(Qt.AlignCenter)
+        self._hint.setWordWrap(True)
+        self._hint.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self._hint.setText(
+            "Aggiungi o seleziona un file STL per l'anteprima 3D\n\n"
+            "Trascina con il tasto sinistro per ruotare\n"
+            "Rotella per zoomare · tasto destro per spostare\n"
+            "Doppio clic per resettare la vista"
+        )
+
+        self._reset_btn = QPushButton("Reset vista", self)
+        self._reset_btn.setObjectName("previewReset")
+        self._reset_btn.setCursor(Qt.PointingHandCursor)
+        self._reset_btn.clicked.connect(self.reset_view)
+        self._reset_btn.hide()
+
     def set_mesh(self, mesh: Mesh | None) -> None:
         self._mesh = mesh
         if mesh is not None and mesh.n_faces > 0:
@@ -88,10 +107,38 @@ class MeshPreview(QOpenGLWidget):
             diag = float(np.linalg.norm(hi - lo))
             self._scale = 1.0 / diag if diag > 1e-9 else 1.0
             self._empty = False
+            self.reset_view()
         else:
             self._empty = True
-        self._upload()
+
+        if self.isValid():
+            self.makeCurrent()
+            try:
+                self._upload()
+            finally:
+                self.doneCurrent()
+        self._update_overlay()
         self.update()
+
+    def reset_view(self) -> None:
+        self._rot_x = -30.0
+        self._rot_y = -35.0
+        self._zoom = 1.0
+        self._pan = np.zeros(2, dtype=np.float32)
+        self.update()
+
+    def _update_overlay(self) -> None:
+        self._hint.setVisible(self._empty)
+        self._reset_btn.setVisible(not self._empty)
+        margin = 10
+        bw = self._reset_btn.sizeHint().width()
+        bh = self._reset_btn.sizeHint().height()
+        self._reset_btn.setGeometry(self.width() - bw - margin, margin, bw, bh)
+        self._hint.setGeometry(24, 24, max(self.width() - 48, 0), max(self.height() - 48, 0))
+
+    def resizeEvent(self, event) -> None:  # noqa: N802
+        super().resizeEvent(event)
+        self._update_overlay()
 
     # ------------------------------------------------------------------ GL
     def initializeGL(self) -> None:
@@ -103,12 +150,22 @@ class MeshPreview(QOpenGLWidget):
         if not self._program.link():
             print("link:", self._program.log())
         self._upload()
+        self._update_overlay()
+
+    def _release_gl(self) -> None:
+        if self._vao is not None:
+            self._vao.destroy()
+            self._vao = None
+        if self._vbo is not None:
+            self._vbo.destroy()
+            self._vbo = None
+        self._n_verts = 0
 
     def _upload(self) -> None:
+        self._release_gl()
         if self._program is None or not self._program.isLinked():
             return
         if self._mesh is None or self._mesh.n_faces == 0:
-            self._n_verts = 0
             return
 
         m = self._mesh
@@ -152,18 +209,26 @@ class MeshPreview(QOpenGLWidget):
         rot_y = np.array([[cxx, 0, cyy], [0, 1, 0], [-cyy, 0, cxx]])
         rot_x = np.array([[1, 0, 0], [0, cx, -cy], [0, cy, cx]])
         rot = rot_x @ rot_y
-        model = np.eye(4, dtype=np.float32)
-        model[:3, :3] = (rot * s).astype(np.float32)
-        model[:3, 3] = (-rot @ self._center * s).astype(np.float32)
-        # pan in normalized-device units, converted back to world units
-        model[0, 3] += self._pan[0] / s
-        model[1, 3] += self._pan[1] / s
 
         # perspective projection
         aspect = max(self.width() / max(self.height(), 1), 0.1)
         fov = 45.0
         f = 1.0 / math.tan(math.radians(fov) / 2.0)
         near, far = 0.01, 100.0
+
+        # camera distance: the mesh is normalized to a unit diagonal, so it fits
+        # comfortably at ~3 units from the eye
+        dist = 3.0 / self._zoom
+        half_h = dist * math.tan(math.radians(fov) / 2.0)
+
+        model = np.eye(4, dtype=np.float32)
+        model[:3, :3] = (rot * s).astype(np.float32)
+        model[:3, 3] = (-rot @ self._center * s).astype(np.float32)
+        # pan in eye units so it stays consistent while zooming
+        model[0, 3] += self._pan[0] * half_h * aspect
+        model[1, 3] += self._pan[1] * half_h
+        # move the model in front of the camera (eye looks down -Z)
+        model[2, 3] -= dist
         proj = np.zeros((4, 4), dtype=np.float32)
         proj[0, 0] = f / aspect
         proj[1, 1] = f
@@ -226,7 +291,7 @@ class MeshPreview(QOpenGLWidget):
         elif e.buttons() & Qt.MiddleButton:
             dy = e.position().y() - self._last.y()
             self._zoom *= 1.0 + dy * 0.01
-            self._zoom = max(0.1, min(20.0, self._zoom))
+            self._zoom = max(0.1, min(5.0, self._zoom))
             self._last = e.position()
             self.update()
 
@@ -239,5 +304,5 @@ class MeshPreview(QOpenGLWidget):
 
     def wheelEvent(self, e: QWheelEvent) -> None:
         self._zoom *= 1.0 + e.angleDelta().y() * 0.001
-        self._zoom = max(0.1, min(20.0, self._zoom))
+        self._zoom = max(0.1, min(5.0, self._zoom))
         self.update()

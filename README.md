@@ -44,10 +44,10 @@ of being frozen into triangles.
 Download the AppImage from the [Releases page](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
 
 ```bash
-wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.1.0/STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
-chmod +x STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
-./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage          # launches the GUI
-./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage --help   # CLI
+wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
+chmod +x STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
+./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage          # launches the GUI
+./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage --help   # CLI
 ```
 
 If FUSE is unavailable, run with `--appimage-extract-and-run`.
@@ -201,10 +201,10 @@ invece di restare congelato in triangoli.
 Scarica l'AppImage dalla [pagina Releases](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
 
 ```bash
-wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.1.0/STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
-chmod +x STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
-./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage          # avvia la GUI
-./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage --help   # CLI
+wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
+chmod +x STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
+./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage          # avvia la GUI
+./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage --help   # CLI
 ```
 
 Se FUSE non è disponibile, esegui con `--appimage-extract-and-run`.
