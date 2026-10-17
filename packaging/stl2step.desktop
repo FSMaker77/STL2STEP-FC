@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=STL2STEP
+Comment=Convert STL meshes into editable STEP CAD models
+Exec=AppRun %F
+Icon=stl2step
+Categories=Graphics;3DGraphics;Engineering;
+Terminal=false
+MimeType=model/stl;model/x.stl-binary;model/x.stl-ascii;

@@ -1,0 +1,15 @@
+{
+  "id": "organic",
+  "name": "Organico",
+  "description": "Sculture e forme libere. STEP tassellato fedele.",
+  "mode": "tessellated",
+  "angular_tolerance_deg": 15.0,
+  "distance_tolerance": 0.1,
+  "min_region_faces": 20,
+  "detect_cylinders": false,
+  "detect_spheres": false,
+  "detect_cones": false,
+  "make_solid": true,
+  "sewing_tolerance": 1e-4,
+  "weld_decimals": 6
+}

@@ -1,0 +1,15 @@
+{
+  "id": "high_precision",
+  "name": "Alta precisione",
+  "description": "Tolleranze strette per parti da riutilizzare in CAD.",
+  "mode": "parametric",
+  "angular_tolerance_deg": 3.0,
+  "distance_tolerance": 0.005,
+  "min_region_faces": 4,
+  "detect_cylinders": true,
+  "detect_spheres": true,
+  "detect_cones": true,
+  "make_solid": true,
+  "sewing_tolerance": 1e-6,
+  "weld_decimals": 7
+}

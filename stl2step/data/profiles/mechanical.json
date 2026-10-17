@@ -1,0 +1,15 @@
+{
+  "id": "mechanical",
+  "name": "Meccanico",
+  "description": "Pezzi con facce piane e cilindriche. Ricostruzione parametrica.",
+  "mode": "auto",
+  "angular_tolerance_deg": 6.0,
+  "distance_tolerance": 0.02,
+  "min_region_faces": 6,
+  "detect_cylinders": true,
+  "detect_spheres": true,
+  "detect_cones": true,
+  "make_solid": true,
+  "sewing_tolerance": 1e-5,
+  "weld_decimals": 6
+}

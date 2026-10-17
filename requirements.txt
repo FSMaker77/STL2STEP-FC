@@ -1,0 +1,4 @@
+numpy>=1.24
+scipy>=1.10
+PySide6>=6.6
+cadquery-ocp>=7.7

@@ -1,0 +1,15 @@
+{
+  "id": "fast",
+  "name": "Veloce",
+  "description": "Conversione rapida con tolleranze ampie.",
+  "mode": "auto",
+  "angular_tolerance_deg": 15.0,
+  "distance_tolerance": 0.1,
+  "min_region_faces": 20,
+  "detect_cylinders": true,
+  "detect_spheres": true,
+  "detect_cones": false,
+  "make_solid": true,
+  "sewing_tolerance": 1e-4,
+  "weld_decimals": 5
+}

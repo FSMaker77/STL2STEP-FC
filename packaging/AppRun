@@ -1,0 +1,10 @@
+#!/bin/sh
+# STL2STEP — AppImage entry point (relocatable).
+SELF=$(readlink -f "$0" 2>/dev/null || echo "$0")
+HERE=$(dirname "$SELF")
+
+export PYTHONHOME="$HERE/usr"
+export PYTHONPATH="$HERE/usr/lib/python3.14/site-packages"
+export LD_LIBRARY_PATH="$HERE/usr/lib:${LD_LIBRARY_PATH:-}"
+
+exec "$HERE/usr/bin/python3" -m stl2step "$@"
