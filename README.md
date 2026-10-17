@@ -39,6 +39,21 @@ of being frozen into triangles.
 
 ### Installation
 
+#### AppImage (recommended)
+
+Download the AppImage from the [Releases page](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
+
+```bash
+wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.1.0/STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
+chmod +x STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
+./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage          # launches the GUI
+./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage --help   # CLI
+```
+
+If FUSE is unavailable, run with `--appimage-extract-and-run`.
+
+#### From source
+
 Requires Python ≥ 3.10 and a Linux environment (tested on Debian/Kali/Ubuntu).
 
 ```bash
@@ -56,6 +71,8 @@ python3 -m venv .venv
 ./.venv/bin/pip install -e .
 ./.venv/bin/python -m stl2step
 ```
+
+Both install paths provide the `stl2step` (CLI) and `stl2step-gui` (GUI) commands; `python -m stl2step` launches the GUI without arguments and the CLI with arguments.
 
 ### Usage
 
@@ -179,6 +196,21 @@ invece di restare congelato in triangoli.
 
 ### Installazione
 
+#### AppImage (consigliato)
+
+Scarica l'AppImage dalla [pagina Releases](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
+
+```bash
+wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.1.0/STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
+chmod +x STL2STEP-FC-0.1.0-Linux-x86_64.AppImage
+./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage          # avvia la GUI
+./STL2STEP-FC-0.1.0-Linux-x86_64.AppImage --help   # CLI
+```
+
+Se FUSE non è disponibile, esegui con `--appimage-extract-and-run`.
+
+#### Dai sorgenti
+
 Richiede Python ≥ 3.10 e un ambiente Linux (testato su Debian/Kali/Ubuntu).
 
 ```bash
@@ -196,6 +228,8 @@ python3 -m venv .venv
 ./.venv/bin/pip install -e .
 ./.venv/bin/python -m stl2step
 ```
+
+Entrambe le opzioni installano i comandi `stl2step` (CLI) e `stl2step-gui` (GUI); `python -m stl2step` avvia la GUI senza argomenti e la CLI con argomenti.
 
 ### Utilizzo
 
