@@ -3,7 +3,7 @@
 #
 # Requirements:
 #   - a working environment (run ./build.sh first)
-#   - network access (to download appimagetool)
+#   - rsync and network access (to download appimagetool)
 #   - FUSE is NOT required at build time; it is only needed to *run* the AppImage
 #     on some distributions (or use `./STL2STEP.AppImage --appimage-extract-and-run`).
 set -euo pipefail
@@ -43,19 +43,19 @@ for lib in libpython${PYVER}.so*; do
     [ -e "$SYS_LIBDIR/$lib" ] && cp -P "$SYS_LIBDIR/$lib" "$APPDIR/usr/lib/"
 done
 
-# Standard library
+# Standard library (without tests, tkinter, build headers and caches)
 STDLIB="$(./.venv/bin/python -c 'import sysconfig; print(sysconfig.get_path("stdlib"))')"
 mkdir -p "$APPDIR/usr/lib/python${PYVER}"
-cp -r "$STDLIB/." "$APPDIR/usr/lib/python${PYVER}/"
+rsync -a \
+    --exclude='__pycache__/' --exclude='*.pyc' --exclude='*.pyo' \
+    --exclude='/config-*/' --exclude='/test/' --exclude='/tests/' \
+    --exclude='/idlelib/' --exclude='/tkinter/' --exclude='/ensurepip/' \
+    --exclude='/lib2to3/' --exclude='/pydoc_data/' \
+    "$STDLIB/" "$APPDIR/usr/lib/python${PYVER}/"
 
-# Site-packages (numpy, scipy, PySide6, OCP, VTK, ...)
+# Only the packages and shared libraries actually needed at runtime.
 SITEPKG="$(./.venv/bin/python -c 'import site; print(site.getsitepackages()[0])')"
-cp -r "$SITEPKG/." "$APPDIR/usr/lib/python${PYVER}/site-packages/"
-
-# The application package itself (editable install already put it on the path,
-# but copy the source tree explicitly so it is definitely present)
-mkdir -p "$APPDIR/usr/lib/python${PYVER}/site-packages/stl2step"
-cp -r stl2step/. "$APPDIR/usr/lib/python${PYVER}/site-packages/stl2step/"
+python3 packaging/trim_appdir.py "$APPDIR" "$SITEPKG" "$PYVER" "$ROOT"
 
 # --- AppRun / desktop / icon ------------------------------------------------
 cp packaging/AppRun "$APPDIR/AppRun"
