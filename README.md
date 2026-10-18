@@ -52,6 +52,24 @@ chmod +x STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
 
 If FUSE is unavailable, run with `--appimage-extract-and-run`.
 
+#### Windows 11 (64-bit)
+
+Two packages are available from the [Releases page](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
+
+- **Setup (recommended)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`.
+  Per-user installer (no administrator rights), installs under
+  `%LOCALAPPDATA%\Programs\STL2STEP`, and creates Start Menu and uninstaller
+  entries. Download the matching `.sha256` file to verify the installer.
+- **Portable (no installation)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`.
+  Extract the whole folder and run `STL2STEP.exe`. Do not run it from inside the
+  ZIP. It needs no Python installation and no administrator rights; the CLI is
+  available as `stl2step-cli.exe`. The package includes `diagnostica.bat`, which
+  writes `diagnostica.txt` with the exact DLL/loading problem if startup fails.
+
+Both packages bundle Python, OpenCASCADE (OCP), VTK and PySide6, so no separate
+Python installation is needed. They are not code-signed, so Windows SmartScreen
+may show a warning.
+
 #### From source
 
 Requires Python ≥ 3.10 and a Linux environment (tested on Debian/Kali/Ubuntu).
@@ -163,6 +181,25 @@ stl2step/
 ./packaging/build_appimage.sh   # generates dist/STL2STEP-FC-*.AppImage
 ```
 
+### Building the Windows installer (from Linux)
+
+The Windows package is an NSIS setup, not a single-file executable: the bundled
+Python runtime and dependencies are installed as normal files.
+
+```bash
+./packaging/windows/build_windows.sh
+# -> dist/STL2STEP-FC-<version>-Windows-x86_64-Setup.exe
+
+./packaging/windows/build_portable_zip.sh
+# -> dist/STL2STEP-FC-<version>-Windows-x86_64-Portable.zip
+```
+
+Build requirements: `python3` + `pip`, `curl`, `unzip`, `zip`, NSIS
+(`makensis`), MinGW-w64 (`x86_64-w64-mingw32-gcc`/`-windres`) and ImageMagick
+`convert`. The first build downloads the Windows wheels and the Python
+embeddable runtime. The installer is created per-user and does not require
+administrator privileges. The portable ZIP is generated from the same payload.
+
 ### License
 
 MIT — see [LICENSE](LICENSE). The OpenCASCADE (OCP) CAD kernel is distributed
@@ -208,6 +245,25 @@ chmod +x STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
 ```
 
 Se FUSE non è disponibile, esegui con `--appimage-extract-and-run`.
+
+#### Windows 11 (64 bit)
+
+Dalla [pagina Releases](https://github.com/FSMaker77/STL2STEP-FC/releases/latest)
+sono disponibili due pacchetti:
+
+- **Setup (consigliato)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`.
+  Installer per-utente (non richiede privilegi di amministratore), installa in
+  `%LOCALAPPDATA%\Programs\STL2STEP` e crea le voci nel menu Start e il
+  disinstallatore. Scarica anche il file `.sha256` per verificare l'installer.
+- **Portable (nessuna installazione)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`.
+  Estrai tutta la cartella e avvia `STL2STEP.exe`. Non eseguirlo dall'interno
+  dello ZIP. Non richiede Python né privilegi di amministratore; la CLI è
+  disponibile come `stl2step-cli.exe`. Il pacchetto include `diagnostica.bat`,
+  che genera `diagnostica.txt` con l'eventuale DLL o errore di caricamento.
+
+Entrambi includono runtime Python, OpenCASCADE (OCP), VTK e PySide6, quindi non
+serve installare Python separatamente. Non sono firmati digitalmente: Windows
+SmartScreen potrebbe mostrare un avviso.
 
 #### Dai sorgenti
 
@@ -320,6 +376,25 @@ stl2step/
 ./build.sh                      # prepara l'ambiente
 ./packaging/build_appimage.sh   # genera dist/STL2STEP-FC-*.AppImage
 ```
+
+### Creare l'installer Windows (da Linux)
+
+Il pacchetto Windows è un setup NSIS, non un singolo eseguibile gigante: il
+runtime Python e le dipendenze vengono installati come normali file.
+
+```bash
+./packaging/windows/build_windows.sh
+# -> dist/STL2STEP-FC-<versione>-Windows-x86_64-Setup.exe
+
+./packaging/windows/build_portable_zip.sh
+# -> dist/STL2STEP-FC-<versione>-Windows-x86_64-Portable.zip
+```
+
+Requisiti di build: `python3` + `pip`, `curl`, `unzip`, `zip`, NSIS
+(`makensis`), MinGW-w64 (`x86_64-w64-mingw32-gcc`/`-windres`) e ImageMagick
+`convert`. La prima build scarica i wheel Windows e il runtime Python embeddable.
+L'installer è per-utente e non richiede privilegi di amministratore. Il pacchetto
+portabile viene generato dallo stesso payload.
 
 ### Licenza
 

@@ -1,0 +1,16 @@
+STL2STEP FC 0.2.1 - versione portabile Windows 11 x86_64
+=========================================================
+
+1. Estrai TUTTA la cartella STL2STEP-FC-0.2.1-Windows-x86_64-Portable
+   in una posizione scrivibile (es. Desktop o C:\STL2STEP).
+2. Avvia STL2STEP.exe. Non serve installare nulla e non serve Python.
+3. Per la CLI: stl2step-cli.exe --help
+
+Se il programma mostra un errore all'avvio:
+- esegui diagnostica.bat nella stessa cartella;
+- invia il file diagnostica.txt che viene aperto.
+
+Note:
+- Non avviare l'exe direttamente dall'interno dello ZIP: estrai prima.
+- Windows SmartScreen puo' chiedere conferma per un programma non firmato.
+- Il programma include il runtime Python, OpenCASCADE (OCP), VTK e PySide6.
