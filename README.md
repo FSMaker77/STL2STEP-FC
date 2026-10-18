@@ -56,11 +56,11 @@ If FUSE is unavailable, run with `--appimage-extract-and-run`.
 
 Two packages are available from the [Releases page](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
 
-- **Setup (recommended)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`.
+- **Setup (recommended)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe).
   Per-user installer (no administrator rights), installs under
   `%LOCALAPPDATA%\Programs\STL2STEP`, and creates Start Menu and uninstaller
   entries. Download the matching `.sha256` file to verify the installer.
-- **Portable (no installation)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`.
+- **Portable (no installation)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip).
   Extract the whole folder and run `STL2STEP.exe`. Do not run it from inside the
   ZIP. It needs no Python installation and no administrator rights; the CLI is
   available as `stl2step-cli.exe`. The package includes `diagnostica.bat`, which
@@ -251,11 +251,11 @@ Se FUSE non è disponibile, esegui con `--appimage-extract-and-run`.
 Dalla [pagina Releases](https://github.com/FSMaker77/STL2STEP-FC/releases/latest)
 sono disponibili due pacchetti:
 
-- **Setup (consigliato)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`.
+- **Setup (consigliato)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe).
   Installer per-utente (non richiede privilegi di amministratore), installa in
   `%LOCALAPPDATA%\Programs\STL2STEP` e crea le voci nel menu Start e il
   disinstallatore. Scarica anche il file `.sha256` per verificare l'installer.
-- **Portable (nessuna installazione)** — `STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`.
+- **Portable (nessuna installazione)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip).
   Estrai tutta la cartella e avvia `STL2STEP.exe`. Non eseguirlo dall'interno
   dello ZIP. Non richiede Python né privilegi di amministratore; la CLI è
   disponibile come `stl2step-cli.exe`. Il pacchetto include `diagnostica.bat`,
