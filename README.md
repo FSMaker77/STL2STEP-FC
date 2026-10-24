@@ -62,7 +62,7 @@ chmod +x STL2STEP-FC-0.2.2-Linux-x86_64.AppImage
 
 If FUSE is unavailable, run with `--appimage-extract-and-run`.
 
-The AppImage is an optimized bundle (~179 MB): it contains only the Python
+The AppImage is an optimized bundle (~190 MB): it contains only the Python
 modules, Qt libraries and OpenCASCADE/VTK runtime files actually used by STL2STEP.
 
 #### Windows 11 (64-bit)
@@ -264,7 +264,7 @@ chmod +x STL2STEP-FC-0.2.2-Linux-x86_64.AppImage
 
 Se FUSE non è disponibile, esegui con `--appimage-extract-and-run`.
 
-L'AppImage è un bundle ottimizzato (~179 MB): contiene solo i moduli Python, le
+L'AppImage è un bundle ottimizzato (~190 MB): contiene solo i moduli Python, le
 librerie Qt e i runtime OpenCASCADE/VTK effettivamente usati da STL2STEP.
 
 #### Windows 11 (64 bit)

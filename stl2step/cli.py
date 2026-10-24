@@ -10,7 +10,19 @@ from .core.params import ConversionParams
 from .profiles import load_all, load_by_id
 
 
+def _safe_stdio() -> None:
+    """Avoid UnicodeEncodeError on legacy Windows console code pages."""
+    for stream in (sys.stdout, sys.stderr):
+        if stream is None:
+            continue
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def main(argv: list[str] | None = None) -> int:
+    _safe_stdio()
     parser = argparse.ArgumentParser(
         prog="stl2step",
         description="Convert STL meshes into editable STEP models.",
@@ -83,10 +95,10 @@ def main(argv: list[str] | None = None) -> int:
                 )
             else:
                 detail = "tassellato"
-            print(f"✓ {src.name} → {dst.name} ({result.mode_used}, {detail})")
+            print(f"[OK] {src.name} -> {dst.name} ({result.mode_used}, {detail})")
             ok += 1
         except Exception as exc:  # noqa: BLE001
-            print(f"✗ {src.name}: {exc}", file=sys.stderr)
+            print(f"[ERR] {src.name}: {exc}", file=sys.stderr)
     return 0 if ok == len(files) else 1
 
 

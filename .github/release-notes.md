@@ -34,6 +34,7 @@ If FUSE is not available, run it with `--appimage-extract-and-run`.
   by the antivirus scanning the newly installed files.
 - **Precompiled bytecode**: the Windows build ships `.pyc` files (or generates
   them once during installation) to avoid the first-run compilation cost.
+- **CLI fixed on Windows**: output no longer fails on legacy console code pages.
 - Linux AppImage build now also works in environments without FUSE at build time.
 
 ## Italiano
@@ -56,6 +57,8 @@ If FUSE is not available, run it with `--appimage-extract-and-run`.
   dall'analisi antivirus dei file appena installati.
 - **Bytecode precompilato** nella build Windows per eliminare il costo di
   compilazione al primo avvio.
+- **CLI corretta su Windows**: l'output non fallisce più con le code page
+  legacy della console.
 
 ## Checksums
 
