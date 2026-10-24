@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from PySide6.QtCore import QThread, Signal
 
-from ..core.convert import ConversionParams, ConversionResult, convert_stl_to_step
+if TYPE_CHECKING:
+    from ..core.params import ConversionParams
 
 
 class ConvertWorker(QThread):
@@ -12,7 +15,7 @@ class ConvertWorker(QThread):
     done = Signal(object)
     failed = Signal(str)
 
-    def __init__(self, input_path: str, output_path: str, params: ConversionParams, parent=None):
+    def __init__(self, input_path: str, output_path: str, params: "ConversionParams", parent=None):
         super().__init__(parent)
         self.input_path = input_path
         self.output_path = output_path
@@ -24,6 +27,9 @@ class ConvertWorker(QThread):
         self._cancelled = True
 
     def run(self) -> None:  # noqa: D401
+        # Imported here so that starting the GUI does not load OCP/SciPy.
+        from ..core.convert import convert_stl_to_step
+
         try:
             result = convert_stl_to_step(
                 self.input_path,

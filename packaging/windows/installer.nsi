@@ -9,7 +9,7 @@ Unicode true
 !include "x64.nsh"
 
 !ifndef VERSION
-  !define VERSION "0.2.1"
+  !define VERSION "0.2.2"
 !endif
 !ifndef PAYLOAD
   !error "PAYLOAD is not defined"
@@ -81,6 +81,13 @@ Section "STL2STEP FC (obbligatorio)" SecCore
   SetOutPath "$INSTDIR\samples"
   File "samples/*.stl"
   SetOutPath "$INSTDIR"
+
+  ; Precompila il bytecode una volta sola: il primo avvio non deve compilare
+  ; ~400 moduli e resta rapido anche su macchine lente. Se il payload e' gia'
+  ; precompilato nel build, questa operazione e' quasi istantanea.
+  DetailPrint "Precompilazione dei moduli Python..."
+  nsExec::Exec '"$INSTDIR\python.exe" -m compileall --invalidation-mode checked-hash -q "$INSTDIR\Lib\site-packages"'
+  Pop $0
 SectionEnd
 
 Section "Scorciatoia sul desktop" SecDesktop

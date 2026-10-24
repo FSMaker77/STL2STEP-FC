@@ -38,7 +38,7 @@ mkdir -p \
 PYBIN="$(readlink -f .venv/bin/python)"
 cp -P "$PYBIN" "$APPDIR/usr/bin/python3"
 
-SYS_LIBDIR="$(python3 -c 'import sysconfig; print(sysconfig.get_config_var("LIBDIR"))')"
+SYS_LIBDIR="$(./.venv/bin/python -c 'import sysconfig; print(sysconfig.get_config_var("LIBDIR"))')"
 for lib in libpython${PYVER}.so*; do
     [ -e "$SYS_LIBDIR/$lib" ] && cp -P "$SYS_LIBDIR/$lib" "$APPDIR/usr/lib/"
 done
@@ -82,7 +82,10 @@ if [ ! -x "$APPIMAGETOOL" ]; then
 fi
 
 echo "==> Generazione ${OUT}"
-ARCH=x86_64 "$APPIMAGETOOL" "$APPDIR" "$OUT"
+if ! ARCH=x86_64 "$APPIMAGETOOL" "$APPDIR" "$OUT"; then
+    echo "==> appimagetool non avviabile direttamente (FUSE?), riprovo con extract-and-run"
+    APPIMAGE_EXTRACT_AND_RUN=1 ARCH=x86_64 "$APPIMAGETOOL" "$APPDIR" "$OUT"
+fi
 
 echo
 echo "AppImage creato: $OUT"

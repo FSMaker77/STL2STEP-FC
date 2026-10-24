@@ -3,14 +3,15 @@
 from __future__ import annotations
 
 import tempfile
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Callable, Optional
 
 import numpy as np
 
 from . import brep, step_io, stl_io
 from .mesh import Mesh
-from .segmentation import Segmentation, SegmentationParams
+from .params import ConversionParams
+from .segmentation import Segmentation
 
 from OCP.STEPControl import STEPControl_Writer, STEPControl_AsIs  # noqa: E402
 from OCP.TopoDS import TopoDS_Shape  # noqa: E402
@@ -19,30 +20,6 @@ from OCP.IFSelect import IFSelect_RetDone  # noqa: E402
 
 
 ProgressCallback = Callable[[str, float, str], None]
-
-
-@dataclass
-class ConversionParams:
-    mode: str = "auto"  # 'auto' | 'parametric' | 'tessellated'
-    angular_tolerance_deg: float = 6.0
-    distance_tolerance: float = 0.02
-    min_region_faces: int = 6
-    detect_cylinders: bool = True
-    detect_spheres: bool = True
-    detect_cones: bool = False
-    make_solid: bool = True
-    sewing_tolerance: float = 1e-5
-    weld_decimals: int = 6
-
-    def segmentation_params(self) -> SegmentationParams:
-        return SegmentationParams(
-            angular_tolerance_deg=self.angular_tolerance_deg,
-            distance_tolerance=self.distance_tolerance,
-            min_region_faces=self.min_region_faces,
-            detect_cylinders=self.detect_cylinders,
-            detect_spheres=self.detect_spheres,
-            detect_cones=self.detect_cones,
-        )
 
 
 @dataclass

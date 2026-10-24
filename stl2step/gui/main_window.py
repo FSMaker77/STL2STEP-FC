@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtWidgets import (
@@ -22,12 +23,14 @@ from PySide6.QtWidgets import (
 )
 
 from .. import __version__
-from ..core.convert import ConversionParams
 from ..core.mesh import Mesh
 from ..version import APP_NAME
 from .params_panel import ParamsPanel
 from .preview import MeshPreview
 from .worker import ConvertWorker
+
+if TYPE_CHECKING:
+    from ..core.params import ConversionParams
 
 
 class _LoadWorker(QThread):

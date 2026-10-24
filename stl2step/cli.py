@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from .core.convert import ConversionParams, convert_stl_to_step
+from .core.params import ConversionParams
 from .profiles import load_all, load_by_id
 
 
@@ -69,6 +69,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     out_dir = Path(args.output) if args.output else None
+    # Imported lazily so --help/--list-profiles stay fast.
+    from .core.convert import convert_stl_to_step
     ok = 0
     for src in files:
         dst = (out_dir / f"{src.stem}.step") if out_dir else src.with_suffix(".step")

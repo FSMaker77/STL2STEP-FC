@@ -11,6 +11,14 @@ STL (triangles)  ──▶  primitive detection  ──▶  STEP (exact BRep)
                       planes · cylinders · spheres · cones
 ```
 
+![STL2STEP FC](stl2step/data/splash.png)
+
+> **0.2.2** — nuova splash screen e avvio molto più rapido: il motore CAD
+> (OpenCASCADE/SciPy) viene caricato alla prima conversione, non all'avvio.
+>
+> **0.2.2** — new splash screen and much faster startup: the CAD engine
+> (OpenCASCADE/SciPy) is loaded on the first conversion instead of at launch.
+
 ---
 
 ## English
@@ -33,6 +41,8 @@ of being frozen into triangles.
 - **Modern GUI** with interactive 3D preview (rotate/zoom), batch queue,
   progress bar and log.
 - **CLI** for automation and scripting.
+- **Fast startup**: the window opens without loading the CAD kernel; OpenCASCADE
+  and SciPy are loaded only on the first conversion.
 - **Safety net**: if the parametric reconstruction diverges from the mesh, the
   software automatically falls back to tessellated mode so the result is always
   geometrically correct.
@@ -44,10 +54,10 @@ of being frozen into triangles.
 Download the AppImage from the [Releases page](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
 
 ```bash
-wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
-chmod +x STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
-./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage          # launches the GUI
-./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage --help   # CLI
+wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.2/STL2STEP-FC-0.2.2-Linux-x86_64.AppImage
+chmod +x STL2STEP-FC-0.2.2-Linux-x86_64.AppImage
+./STL2STEP-FC-0.2.2-Linux-x86_64.AppImage          # launches the GUI
+./STL2STEP-FC-0.2.2-Linux-x86_64.AppImage --help   # CLI
 ```
 
 If FUSE is unavailable, run with `--appimage-extract-and-run`.
@@ -59,11 +69,11 @@ modules, Qt libraries and OpenCASCADE/VTK runtime files actually used by STL2STE
 
 Two packages are available from the [Releases page](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
 
-- **Setup (recommended)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe).
+- **Setup (recommended)** — [`STL2STEP-FC-0.2.2-Windows-x86_64-Setup.exe`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.2/STL2STEP-FC-0.2.2-Windows-x86_64-Setup.exe).
   Per-user installer (no administrator rights), installs under
   `%LOCALAPPDATA%\Programs\STL2STEP`, and creates Start Menu and uninstaller
   entries. Download the matching `.sha256` file to verify the installer.
-- **Portable (no installation)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip).
+- **Portable (no installation)** — [`STL2STEP-FC-0.2.2-Windows-x86_64-Portable.zip`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.2/STL2STEP-FC-0.2.2-Windows-x86_64-Portable.zip).
   Extract the whole folder and run `STL2STEP.exe`. Do not run it from inside the
   ZIP. It needs no Python installation and no administrator rights; the CLI is
   available as `stl2step-cli.exe`. The package includes `diagnostica.bat`, which
@@ -202,6 +212,9 @@ Build requirements: `python3` + `pip`, `curl`, `unzip`, `zip`, NSIS
 `convert`. The first build downloads the Windows wheels and the Python
 embeddable runtime. The installer is created per-user and does not require
 administrator privileges. The portable ZIP is generated from the same payload.
+If a Python 3.12 interpreter is available (`PYC_PYTHON=python3.12`), the build
+also ships precompiled bytecode; otherwise the NSIS installer compiles it once
+at install time.
 
 ### License
 
@@ -230,6 +243,8 @@ invece di restare congelato in triangoli.
 - **GUI moderna** con anteprima 3D interattiva (rotazione/zoom), coda di
   conversione batch, barra di avanzamento e log.
 - **CLI** per automazione e script.
+- **Avvio rapido**: la finestra si apre senza caricare il motore CAD;
+  OpenCASCADE e SciPy vengono caricati solo alla prima conversione.
 - **Rete di sicurezza**: se la ricostruzione parametrica diverge dal mesh, il
   software passa automaticamente alla modalità tassellata per garantire sempre un
   risultato geometricamente corretto.
@@ -241,10 +256,10 @@ invece di restare congelato in triangoli.
 Scarica l'AppImage dalla [pagina Releases](https://github.com/FSMaker77/STL2STEP-FC/releases/latest):
 
 ```bash
-wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
-chmod +x STL2STEP-FC-0.2.1-Linux-x86_64.AppImage
-./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage          # avvia la GUI
-./STL2STEP-FC-0.2.1-Linux-x86_64.AppImage --help   # CLI
+wget https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.2/STL2STEP-FC-0.2.2-Linux-x86_64.AppImage
+chmod +x STL2STEP-FC-0.2.2-Linux-x86_64.AppImage
+./STL2STEP-FC-0.2.2-Linux-x86_64.AppImage          # avvia la GUI
+./STL2STEP-FC-0.2.2-Linux-x86_64.AppImage --help   # CLI
 ```
 
 Se FUSE non è disponibile, esegui con `--appimage-extract-and-run`.
@@ -257,11 +272,11 @@ librerie Qt e i runtime OpenCASCADE/VTK effettivamente usati da STL2STEP.
 Dalla [pagina Releases](https://github.com/FSMaker77/STL2STEP-FC/releases/latest)
 sono disponibili due pacchetti:
 
-- **Setup (consigliato)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Setup.exe).
+- **Setup (consigliato)** — [`STL2STEP-FC-0.2.2-Windows-x86_64-Setup.exe`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.2/STL2STEP-FC-0.2.2-Windows-x86_64-Setup.exe).
   Installer per-utente (non richiede privilegi di amministratore), installa in
   `%LOCALAPPDATA%\Programs\STL2STEP` e crea le voci nel menu Start e il
   disinstallatore. Scarica anche il file `.sha256` per verificare l'installer.
-- **Portable (nessuna installazione)** — [`STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.1/STL2STEP-FC-0.2.1-Windows-x86_64-Portable.zip).
+- **Portable (nessuna installazione)** — [`STL2STEP-FC-0.2.2-Windows-x86_64-Portable.zip`](https://github.com/FSMaker77/STL2STEP-FC/releases/download/v0.2.2/STL2STEP-FC-0.2.2-Windows-x86_64-Portable.zip).
   Estrai tutta la cartella e avvia `STL2STEP.exe`. Non eseguirlo dall'interno
   dello ZIP. Non richiede Python né privilegi di amministratore; la CLI è
   disponibile come `stl2step-cli.exe`. Il pacchetto include `diagnostica.bat`,

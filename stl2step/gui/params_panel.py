@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ..core.convert import ConversionParams
+from ..core.params import ConversionParams
 from ..profiles import Profile, load_all
 
 

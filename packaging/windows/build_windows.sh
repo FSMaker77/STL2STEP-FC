@@ -203,8 +203,30 @@ PEFILE="$(python3 -c 'import pefile; print(pefile.__file__)' 2>/dev/null || true
 if [ -n "$PEFILE" ] && [ -f "$PEFILE" ]; then
     cp "$PEFILE" "$PAYLOAD/"
 fi
+echo "==> Pulizia cache Python"
 find "$PAYLOAD" -type d -name __pycache__ -prune -exec rm -rf {} + 2>/dev/null || true
 find "$PAYLOAD" -name '*.pyc' -delete
+
+# Precompila il bytecode con un interprete della stessa minor version del
+# runtime (3.12).  I .pyc evitano di compilare ~400 moduli al primo avvio.
+# Su host Linux/CI impostare PYC_PYTHON=/percorso/python3.12; se non c'e',
+# i .pyc vengono creati da NSIS all'installazione (installer) o al primo
+# avvio (portable).
+PYC_PYTHON="${PYC_PYTHON:-}"
+if [ -z "$PYC_PYTHON" ] && command -v "python${PYTAG}" >/dev/null 2>&1; then
+    PYC_PYTHON="python${PYTAG}"
+fi
+PY_MAJOR="${PYTAG:0:1}"
+PY_MINOR="${PYTAG:1}"
+if [ -n "$PYC_PYTHON" ] \
+   && "$PYC_PYTHON" -c "import sys; raise SystemExit(0 if sys.version_info[:2] == (${PY_MAJOR}, ${PY_MINOR}) else 1)"; then
+    echo "==> Precompilazione bytecode con $("$PYC_PYTHON" -V 2>&1)"
+    "$PYC_PYTHON" -m compileall --invalidation-mode checked-hash -q -j 0 \
+        "$PAYLOAD/Lib/site-packages" >/dev/null \
+        || echo "ATTENZIONE: precompilazione parziale (i moduli mancanti saranno compilati al primo avvio)"
+else
+    echo "==> Python ${PY_MAJOR}.${PY_MINOR} non trovato: nessun .pyc nel payload"
+fi
 
 echo "==> Copia runtime MSVC accanto a python.exe"
 for f in concrt140.dll msvcp140.dll msvcp140_1.dll msvcp140_2.dll \
